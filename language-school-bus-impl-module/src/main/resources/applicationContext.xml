@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                           http://www.springframework.org/schema/tx 
+                           http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+    
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="multiModuleLanguageSchool"/>
+    </bean>
+    
+    <!-- add spring transaction support (@Transactional)-->
+    <bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+    <tx:annotation-driven transaction-manager="txManager"/>
+    
+    <!--     Course     -->
+    <!-- CourseDao + entityManager -->
+    <bean id="courseDao" class="cz.muni.fi.pa165.languageschool.dao.impl.CourseDaoImpl">
+        <property name="entityManager">
+            <bean class = "org.springframework.orm.jpa.support.SharedEntityManagerBean">
+                <property name = "entityManagerFactory" ref="entityManagerFactory"/>  
+            </bean>
+        </property>
+    </bean>
+    
+    <!-- CourseService -->
+    <bean id="courseService" class="cz.muni.fi.pa165.languageschool.service.impl.CourseServiceImpl">
+        <property name="courseDao" ref="courseDao" />
+    </bean>
+        
+    <!--     Lecture     -->
+    <!-- LectureDao + entityManager -->
+    <bean id="lectureDao" class="cz.muni.fi.pa165.languageschool.dao.impl.LectureDaoImpl">
+        <property name="entityManager">
+            <bean class = "org.springframework.orm.jpa.support.SharedEntityManagerBean">
+                <property name = "entityManagerFactory" ref="entityManagerFactory"/>  
+            </bean>
+        </property>
+    </bean>
+    
+    <!-- LectureService -->
+    <bean id="lectureService" class="cz.muni.fi.pa165.languageschool.service.impl.LectureServiceImpl">
+        <property name="lectureDao" ref="lectureDao" />
+    </bean>
+    
+
+    <!--     User     -->
+    <!-- LecturerDao + entityManager -->
+    <bean id="lecturerDao" class="cz.muni.fi.pa165.languageschool.dao.impl.LecturerDaoImpl">
+        <property name="entityManager">
+            <bean class = "org.springframework.orm.jpa.support.SharedEntityManagerBean">
+                <property name = "entityManagerFactory" ref="entityManagerFactory"/>  
+            </bean>
+        </property>
+    </bean>
+    
+    <!-- LecturerService -->
+    <bean id="lecturerService" class="cz.muni.fi.pa165.languageschool.service.impl.LecturerServiceImpl">
+        <property name="lecturerDao" ref="lecturerDao" />
+    </bean>
+
+
+    <!--     Student     -->
+    <!-- StudentDao + entityManager -->
+    <bean id="studentDao" class="cz.muni.fi.pa165.languageschool.dao.impl.StudentDaoImpl">
+        <property name="entityManager">
+            <bean class = "org.springframework.orm.jpa.support.SharedEntityManagerBean">
+                <property name = "entityManagerFactory" ref="entityManagerFactory"/>  
+            </bean>
+        </property>
+    </bean>
+    
+    <!-- StudentService -->
+    <bean id="studentService" class="cz.muni.fi.pa165.languageschool.service.impl.StudentServiceImpl">
+        <property name="studentDao" ref="studentDao" />
+    </bean>
+
+
+</beans>
